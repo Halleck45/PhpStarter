@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<project name="tool-owner" basedir="./../" default="help">
+    
+    <target name="owner.change" depends="valide.owner.change">
+        <if>
+            <not>
+                <isset property="owner.user" />
+            </not>
+            <then>
+                <php expression="trim(`whoami`);" returnProperty="owner.user"/>
+            </then>
+        </if>
+        <if>
+            <not>
+                <isset property="owner.group" />
+            </not>
+            <then>
+                <php expression="`id -gn`;" returnProperty="owner.group"/>
+            </then>
+        </if>
+        
+        <echo message="change for ${owner.user}:${owner.group}"/>
+        <chown user="${owner.user}" group="${owner.group}"
+               verbose="false"
+               failonerror="false">
+            <fileset dir="${directory}"/>
+        </chown>
+        
+    </target>
+    
+    
+    <target name="valide.owner.change">
+        <fail unless="directory" message="Owner - Directory is missing" />
+    </target>
+    
+    
+</project>

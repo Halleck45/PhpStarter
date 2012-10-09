@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<project name="framework-symfony21" basedir="./../" default="help">
+    
+    <!-- Install Symfony 2.1 -->
+    <target name="install.symfony21">
+        
+        <echo message="Install of Symfony 2.1..." />
+        
+        <!-- sources -->
+        <phingCall target="composer.get"/>
+        <exec command="php composer.phar create-project symfony/framework-standard-edition ${destination}" />
+        <phingCall target="composer.remove"/>
+        
+        <!-- Owner -->
+        <phingCall target="owner.change" >
+            <property name="owner.group" value="www-data" />
+            <property name="directory" value="${destination}" />
+        </phingCall>
+         
+        <!-- Rights -->
+        <!--<exec command="sudo chmod +a &quot;${owner.group} allow delete,write,append,file_inherit,directory_inherit&quot; ${destination}/app/cache ${destination}/app/logs" />
+        <exec command="sudo chmod +a &quot;${owner.user} allow delete,write,append,file_inherit,directory_inherit&quot; ${destination}/app/cache ${destination}/app/logs" />-->
+        <exec command="sudo setfacl -R -m u:${owner.group}:rwx -m u:${owner.user}:rwx ${destination}/app/cache ${destination}/app/logs" />
+        <exec command="sudo setfacl -dR -m u:${owner.group}:rwx -m u:${owner.user}:rwx ${destination}/app/cache ${destination}/app/logs" />
+                        
+        <!--  virtualhost -->
+        <phingCall target="apache2.vh.create">
+            <property name="docroot" value="${destination}/web" />
+            <property name="vhost" value="${vhost}" />
+        </phingCall>
+        
+        <echo message="Done !" />
+    </target>
+    
+    
+    <!-- Remove Symfony 2.1 -->
+    <target name="remove.symfony21">
+        
+        <echo message="Removing application" />
+        
+        <!-- sources -->
+        <delete dir="${destination}" quiet="true" includeemptydirs="true"/>
+                        
+        <!-- virtualhost -->
+        <phingCall target="apache2.vh.remove">
+            <property name="vhost" value="${vhost}" />
+        </phingCall>
+        
+        <echo message="Done !" />
+    </target>
+</project>

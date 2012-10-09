@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<project name="framework-zendframework2" basedir="./../" default="help">
+    
+    <!-- Install Symfony 2.1 -->
+    <target name="install.zf2">
+        
+        <echo message="Install of Zend Framework 2..." />
+        
+        <!-- sources -->
+        <phingCall target="composer.get"/>
+        <exec command="php composer.phar create-project --repository-url=http://packages.zendframework.com zendframework/skeleton-application ${destination}" />
+        <phingCall target="composer.remove"/>
+        
+        <!-- Owner -->
+        <phingCall target="owner.change" >
+            <property name="owner.group" value="www-data" />
+            <property name="directory" value="${destination}" />
+        </phingCall>
+         
+        <!-- virtualhost -->
+        <phingCall target="apache2.vh.create">
+            <property name="docroot" value="${destination}/public" />
+            <property name="vhost" value="${vhost}" />
+        </phingCall>
+        
+        <echo message="Done !" />
+    </target>
+    
+    
+    <!-- Remove ZF2 -->
+    <target name="remove.zf2">
+        
+        <echo message="Removing application" />
+        
+        <!-- sources -->
+        <delete dir="${destination}" quiet="true" includeemptydirs="true"/>
+                        
+        <!-- virtualhost -->
+        <phingCall target="apache2.vh.remove">
+            <property name="vhost" value="${vhost}" />
+        </phingCall>
+        
+        <echo message="Done !" />
+    </target>
+</project>

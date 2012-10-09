@@ -1,0 +1,10 @@
+<VirtualHost *:80>
+  ServerName ##SERVNAME##
+  DocumentRoot "##DOCROOT##"
+  <Directory "##DOCROOT##">
+    Options -Indexes FollowSymLinks MultiViews
+    AllowOverride All
+    Order allow,deny
+    allow from all
+  </Directory>
+</VirtualHost>

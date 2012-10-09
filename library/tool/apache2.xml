@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<!-- Virtual host -->
+<!-- @author Rodolfo Ripado -->
+<!-- @site https://github.com/gaspaio/papache/blob/master/papache.xml -->
+<project name="tool-apache2" basedir="./../" default="help">
+    
+    <!-- create virtual host -->
+    <target name="apache2.vh.create" depends="apache2.vh.validate" >
+        <echo message="Creating virtual host ${vhost}"/>
+        <copy file="${templateDir}/vhost_template"
+              tofile="${apacheSitesDir}/${vhost}"
+              overwrite="true">
+            <filterchain>
+                <replaceregexp>
+                    <regexp pattern="##SERVNAME##" replace="${vhost}" ignoreCase="true" />
+                    <regexp pattern="##DOCROOT##" replace="${docroot}" ignoreCase="false" />
+                </replaceregexp>
+            </filterchain>
+        </copy>
+ 
+        <!-- apply site and reload apache configs -->
+        <exec command="a2ensite ${vhost}" />
+        <exec command="service apache2 reload" />
+
+        <!-- update hosts file -->
+        <phingCall target="host.add"/>
+    </target>
+    
+    <!-- Remove virtual host -->
+    <target name="apache2.vh.remove" depends="apache2.vh.validate">
+        <echo message="Deleting virtual host ${vhost}"/>
+        <exec command="a2dissite ${vhost}"/>
+        <exec command="service apache2 reload"/>
+        <delete file="${apacheSitesDir}/${vhost}"/>
+        <phingCall target="host.remove" />
+    </target>
+    
+    <!-- Add the virtual host entry to the /etc/hosts file -->
+    <target name="host.add" depends="apache2.vh.validate">
+        <append destFile="/etc/hosts" text="${line.separator}127.0.0.1 ${vhost}" />
+    </target>
+    
+    <!-- Remove the virtual host entry from the /etc/hosts file -->
+    <target name="host.remove" depends="apache2.vh.validate">
+        <php expression="str_replace('.','\.', '${vhost}')" returnProperty="cleanVhostname"/>
+        <exec command="sed -i '/${cleanVhostname}/d' /etc/hosts"/>
+    </target>
+    
+    
+    <target name="apache2.vh.validate">
+        <fail unless="vhost" message="No virtual host name! Check the help text for options." />
+    </target>
+</project>

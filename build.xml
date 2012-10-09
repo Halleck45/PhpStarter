@@ -1,0 +1,67 @@
+<?xml version="1.0" ?>
+<project name="install" basedir="." default="help">
+    
+    <property file="./properties/install.properties"/>
+    <property name="framework" value="symfony21" />
+    <property name="vhost" value="${name}" />
+    
+    <import file="./library/framework/symfony21.xml"/>
+    <import file="./library/framework/zf2.xml"/>
+    <import file="./library/tool/apache2.xml"/>
+    <import file="./library/tool/composer.xml"/>
+    <import file="./library/tool/owner.xml"/>
+        
+    <target name="help">
+        <echo>
+            Install PHP Framework on your local server.
+            
+            Basic usage:
+
+            -- framework            framework to use (example: symfony21)
+            -- destination          destination
+            -- vhost                host name
+            
+            
+            Available actions:
+            
+            - remove                removes project (sources, hosts...)
+            - install               install new project
+            
+            
+            Examples:
+            
+            phing  
+                -Dframework=symfony21 
+                -Ddestination=/var/www/demo
+                -Dvhost=demo 
+                install
+            
+            Will install Symfony 2.1 in /var/www/demo and add virtualhost on /var/www/demo/web
+            
+            phing  
+                -Dframework=zf2
+                -Ddestination=/var/www/demo
+                -Dvhost=demo 
+                install
+            
+            Will install Zend Framework 2 in /var/www/demo and add virtualhost on /var/www/demo/public
+        </echo>
+    </target>
+    
+    <!-- Dispatcher -->
+    <target name="install">
+        <fail unless="vhost" message="Virtual host is missing" />
+        <fail unless="destination" message="Destination is missing" />
+        <fail unless="framework" message="Framework is missing" />
+        <phingCall target="install.${framework}" />
+    </target>
+    
+    <!-- Dispatcher -->
+    <target name="remove" >
+        <fail unless="vhost" message="Virtual host is missing" />
+        <fail unless="destination" message="Destination is missing" />
+        <phingCall target="remove.${framework}" />
+    </target>
+    
+    
+</project>

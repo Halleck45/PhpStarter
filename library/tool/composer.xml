@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<project name="tool-composer" basedir="./../" default="help">
+    
+    <!-- Get Composer -->
+    <target name="composer.get">
+        <exec command="curl -s https://getcomposer.org/installer | php" />
+    </target>
+    
+    <!-- Remove Composer -->
+    <target name="composer.remove">
+        <delete file="composer.phar" />
+    </target>
+    
+</project>
