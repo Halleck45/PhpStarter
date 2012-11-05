@@ -3,19 +3,20 @@
     
     <!-- Get Composer -->
     <target name="composer.get">
-        <phingCall target="php.check.curl" />
-        <exec command="curl -s https://getcomposer.org/installer | php" />
+        <php expression="strlen(`which curl`) > 0" returnProperty="curlEnabled"/>
+        <if>
+            <equals arg1="${curlEnabled}" arg2="true" />
+            <then>
+                <exec command="curl -s https://getcomposer.org/installer | php" />
+            </then>
+            <else>
+                <exec command="php -r &quot;eval('?>'.file_get_contents('https://getcomposer.org/installer'));&quot;" />
+            </else>
+        </if>
     </target>
     
-    <!-- Remove Composer -->
+    <!-- Remove Composer (phar) -->
     <target name="composer.remove">
         <delete file="composer.phar" />
-    </target>
-    
-    
-    <!-- Curl -->
-    <target name="php.check.curl">
-        <php expression="in_array('curl', get_loaded_extensions())" returnProperty="curlEnabled"/>
-        <fail unless="curlEnabled" message="You need cUrl to use Composer" />
     </target>
 </project>
