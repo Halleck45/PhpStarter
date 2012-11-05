@@ -19,4 +19,24 @@
     <target name="composer.remove">
         <delete file="composer.phar" />
     </target>
+    
+    <!-- Create project -->
+    <target name="composer.create.project">
+        <!-- optional options -->
+        <condition property="composer.project.options" value="">
+            <not>
+                <isset property="composer.project.options"></isset>
+            </not>
+        </condition>
+        
+        <!-- create full tree, except the last folder : it will be added by composer -->
+        <mkdir dir="${composer.project.destination}" />
+        <delete dir="${composer.project.destination}" />
+        
+        <phingCall target="composer.get"/>
+        <echo message="php composer.phar create-project ${composer.project.options} ${composer.project.name} ${composer.project.destination}" />
+        <exec command="php composer.phar create-project --no-interaction ${composer.project.options} ${composer.project.name} ${composer.project.destination}" />
+        <phingCall target="composer.remove"/>
+    </target>
+    
 </project>

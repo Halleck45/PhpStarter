@@ -7,9 +7,11 @@
         <echo message="Install of Zend Framework 2..." />
         
         <!-- sources -->
-        <phingCall target="composer.get"/>
-        <exec command="php composer.phar create-project --repository-url=http://packages.zendframework.com zendframework/skeleton-application ${destination}" />
-        <phingCall target="composer.remove"/>
+        <phingCall target="composer.create.project">
+            <property name="composer.project.name" value="zendframework/skeleton-application" />
+            <property name="composer.project.destination" value="${destination}" />
+            <property name="composer.project.options" value="--repository-url=http://packages.zendframework.com" />
+        </phingCall>
         
         <!-- Owner -->
         <phingCall target="owner.change" >

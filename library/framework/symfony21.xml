@@ -7,9 +7,10 @@
         <echo message="Install of Symfony 2.1..." />
         
         <!-- sources -->
-        <phingCall target="composer.get"/>
-        <exec command="php composer.phar create-project symfony/framework-standard-edition ${destination}" />
-        <phingCall target="composer.remove"/>
+        <phingCall target="composer.create.project">
+            <property name="composer.project.name" value="symfony/framework-standard-edition" />
+            <property name="composer.project.destination" value="${destination}" />
+        </phingCall>
         
         <!-- Owner -->
         <phingCall target="owner.change" >
