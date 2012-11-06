@@ -5,6 +5,7 @@ php:
 
 before_install:
   - sudo apt-get install -y --force-yes php-pear apache2 libapache2-mod-php5
+  - sudo usermod -a -G www-data `whoami`
   - sudo a2enmod rewrite
   - sudo service apache2 restart
   - sudo pear channel-discover pear.phing.info
