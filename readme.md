@@ -1,6 +1,8 @@
 PhpStarter
 ================
 
+[![Build Status](https://secure.travis-ci.org/Halleck45/PhpStarter.png)](http://travis-ci.org/Halleck45/PhpStarter)
+
 Easy way to create your projects with phing.
 
 ## Description

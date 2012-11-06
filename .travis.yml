@@ -3,8 +3,10 @@ php:
   - 5.3
   - 5.4
 
-before_script:
-  - sudo apt-get install php-pear
+before_install:
+  - sudo apt-get install -y --force-yes php-pear apache2 libapache2-mod-php5
+  - sudo a2enmod rewrite
+  - sudo service apache2 restart
   - sudo pear channel-discover pear.phing.info
   - sudo pear install phing/phing  
 
