@@ -2,5 +2,10 @@ language: php
 php:
   - 5.3
   - 5.4
-  
+
+before_script:
+  - sudo apt-get install php5-pear
+  - sudo pear channel-discover pear.phing.info
+  - sudo pear install phing/phing  
+
 script: ./tests/bin/phpunit.phar .
