@@ -2,6 +2,7 @@
 <project name="install" basedir="." default="help">
     
     <property file="./properties/install.properties"/>
+    <property file="./properties/local.properties"/>
     <property name="framework" value="symfony21" />
     <property name="vhost" value="${name}" />
     
