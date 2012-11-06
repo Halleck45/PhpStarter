@@ -39,7 +39,7 @@ phing
 Will install `Symfony 2.1` on your local computer, in `/var/www/demo`, and will add VirtualHost named `demo`.
 
 
-If you want to unistall a project, just run
+If you want to uninstall a project, just run
 
 ```
 phing  
@@ -67,7 +67,7 @@ templateDir=./templates
 owner.group=www-data
 ```
 
-Limitations
------------
-
-This tool doesn't look after your database !
+If you want to configure a local configuration, you can create a file named `properties/local.properties`. It will never be commited and will be ignored by git.
+```
+owner.user=myLocalUser
+```
